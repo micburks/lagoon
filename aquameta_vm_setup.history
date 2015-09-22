@@ -1,0 +1,103 @@
+# sudo apt-get install virtualbox vagrant
+# or brew install virtualbox vagrant
+vagrant box add hashicorp/precise64
+vagrant init hashicorp/precise64
+vagrant up
+vagrant ssh
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install git cmake
+sudo touch /etc/apt/sources.list.d/pgdg.list
+sudo vi /etc/apt/sources.list.d/pgdg.list
+# INSERT
+# deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main
+sudo -iu root
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+exit
+sudo apt-get update
+# Didn't work??
+
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+sudo apt-get install ca-certificates
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+# Worked??
+
+sudo apt-get upgrade
+sudo apt-get install postgresql-9.4
+sudo apt-get install postgresql-plpython-9.4 postgresql-server-dev-9.4
+
+
+# Should I have at some point done this?
+# sudo apt-get update -y && apt-get install -y wget ca-certificates lsb-release git build-essential cmake zlib1g-dev libssl-dev
+
+git clone https://github.com/aquametalabs/aquameta
+# unnecessary sudo apt-get install postgresql-contrib-9.4
+
+# Create superuser
+sudo -iu postgres
+psql
+create role aquameta superuser login;
+\q
+logout
+
+# Build background worker
+cd core/004-aquameta_endpoint/servers/background_worker
+git clone https://github.com/qpfiffer/libwebsockets
+cd libwebsockets
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+
+# unnecessary
+# Modify pg_http.c
+# conn = PQconnectdb("dbname=aquameta");
+sudo apt-get make
+
+
+# Build background worker
+cd ../..
+make
+sudo make install
+
+
+# Create extension
+psql postgres
+create extension pg_http;
+\q
+
+# For some reason pg_http.so can't be found. All these install were to try to make it work
+sudo apt-get install python-setuptools
+sudo easy_install pgxnclient
+sudo apt-get install build-essential
+sudo apt-get install postgresql-contrib
+sudo apt-get install pgxnclient
+
+# Not sure if the last chunk was necessary, the final install that made the pg_http.so be found was postgis
+sudo apt-get install postgis
+
+
+# Modify postgresql.conf
+sudo vi /etc/postgresql/9.4/main/postgresql.conf
+# shared_preload_libraries = 'pg_http'
+
+# Reload Postgresql
+sudo service postgresql restart
+
+
+# Build Aquameta
+cd aquameta
+./build.sh
+
+
+
+build webserver
+http://localhost:8080
+
+
+
+
+
+
