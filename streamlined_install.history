@@ -57,6 +57,12 @@ sudo vi /etc/postgresql/9.4/main/postgresql.conf
 # Insert line
 # shared_preload_libraries = 'pg_http'
 
+
+# GODDAMMIT - I don't know how many times this has happened to me - After two days...
+sudo ldconfig
+
+
+
 # Reload Postgresql
 sudo service postgresql restart
 
