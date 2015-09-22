@@ -1,0 +1,80 @@
+# sudo apt-get install virtualbox vagrant
+# or brew install virtualbox vagrant
+vagrant box add hashicorp/precise64
+vagrant init hashicorp/precise64
+vagrant up
+vagrant ssh
+
+##### INSIDE VM #####
+# Update and Install
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install git make cmake ca-certificates
+
+# Installing Postgres
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install postgresql-9.4 postgresql-plpython-9.4 postgresql-server-dev-9.4 postgis
+git clone https://github.com/aquametalabs/aquameta
+
+# Create superuser
+sudo -iu postgres
+psql
+##### INISDE PSQL #####
+create role aquameta superuser login;
+\q
+##### EXIT PSQL #####
+logout
+
+# Build background worker
+cd core/004-aquameta_endpoint/servers/background_worker
+git clone https://github.com/qpfiffer/libwebsockets
+cd libwebsockets
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+
+# Build background worker
+cd ../..
+make
+sudo make install
+
+# Create extension
+psql postgres
+##### INISDE PSQL #####
+create extension pg_http;
+\q
+##### EXIT PSQL #####
+
+# For some reason pg_http.so can't be found. All these install were to try to make it work
+# sudo apt-get install python-setuptools
+# sudo easy_install pgxnclient
+# sudo apt-get install build-essential
+# sudo apt-get install postgresql-contrib
+# sudo apt-get install pgxnclient
+
+# Modify postgresql.conf
+sudo vi /etc/postgresql/9.4/main/postgresql.conf
+# Insert line
+# shared_preload_libraries = 'pg_http'
+
+# Reload Postgresql
+sudo service postgresql restart
+
+# Build Aquameta
+cd aquameta
+./build.sh
+
+##### EXIT VM #####
+
+http://localhost:8080
+
+
+
+
+
+
