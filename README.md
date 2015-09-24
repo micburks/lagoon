@@ -11,6 +11,7 @@
   * Install doesn't check out resources or widgets. Seems to be a problem with hash/blobs
 
 2. Steal awesome features from laravel/homestead
+  * port forwarding
   * sites
   * directory sharing
 
