@@ -19,10 +19,11 @@ vagrant ssh
 #   Post    #
 #############
 # Package box
-vagrant package --output aquametalabs/lagoon.box
+# vagrant package --output aquametalabs/lagoon.box
+vagrant package --output lagoon.box
 
 # Add new box to vagrant
-vagrant box add aquametalabs/lagoon aquametalabs/lagoon.box
+vagrant box add aquametalabs/lagoon lagoon.box
 
 # Clean up
 vagrant destroy

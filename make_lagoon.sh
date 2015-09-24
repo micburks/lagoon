@@ -23,9 +23,6 @@ sudo -iu postgres
 # TODO: This should be aquameta user
 ## echo "create role aquameta superuser login;" | psql
 echo "create role vagrant superuser login;" | psql
-
-# Create extension
-echo "create extension pg_http;" | psql
 logout
 
 # Modify postgresql.conf
@@ -42,6 +39,8 @@ cd ~/aquameta/core/004-aquameta_endpoint/servers/background_worker && git clone 
 # Build background worker
 cd ../.. && make && sudo make install
 
+# Create extension
+echo "create extension pg_http;" | psql postgres
 # Reset library cache to acces pg_http.so
 sudo ldconfig
 
