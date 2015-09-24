@@ -1,6 +1,6 @@
 # lagoon
 
-   Vagrant box for streamlined [Aquameta](https://github.com/aquametalabs/aquameta) install  
+   Vagrant box for quick [Aquameta](https://github.com/aquametalabs/aquameta) install  
 
    Hosted on Atlas - [micburks/lagoon](https://atlas.hashicorp.com/micburks/boxes/lagoon)  
 
