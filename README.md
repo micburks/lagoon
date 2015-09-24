@@ -7,11 +7,12 @@
    Install with `vagrant init micburks/lagoon; vagrant up --provider virtualbox`  
 
 ## todo
-1. Aquameta is currently broken
+1. Change
+  * username
+  * machine name
+2. Aquameta install is currently broken
   * Install doesn't check out resources or widgets. Seems to be a problem with hash/blobs
-
-2. Steal awesome features from laravel/homestead
+3. Steal awesome features from laravel/homestead
   * port forwarding
   * sites
   * directory sharing
-
