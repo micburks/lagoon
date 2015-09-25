@@ -3,79 +3,66 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "mynewbox"
+##################
+  # Basic Config
+##################
+  config.vm.box = "micburks/lagoon"
+
+  # Should this be false - Only updated when user attempts
+  config.vm.box_check_update = true
   config.vm.network "private_network", ip: "192.168.33.10"
-  config.vm.hostname = "mynewbox"
-  config.vm.synced_folder ".", "/var/www", :mount_options => ["dmode=777", "fmode=666"]
+  config.vm.hostname = "lagoon"
+
+##################
+  # Provisions
+##################
+  # What provisions might we need?
+  # config.vm.provision "shell", inline: "cd aquameta && git pull && ./backup_aquameta && dropdb aquameta && ./build.sh"
+
+##################
+  # Synced folders
+##################
+  # What resources might we need to share?
+  # Maybe filesystem for assets/pictures/videos
+  # Maybe backups/bundles
+  config.vm.synced_folder "~/bundles/", "/srv/aquameta/bundles", create: true
+
+  # If Aquameta install was shared - run Aquameta install everytime 'vagrant up'
+  # config.vm.synced_folder "~/aquameta/", "/srv/aquameta"
+
+  # Preloaded from hashicorp/precise64
+  # config.vm.synced_folder ".", "/var/www", :mount_options => ["dmode=777", "fmode=666"]
+
+##################
+  # SSH
+##################
+  config.ssh.username = 'aquameta'
+
+  # Maybe this should be false?
+  config.ssh.forward_agent = true
+
+  # By default, this is already true
+  config.ssh.insert_key = true
+
+##################
+  # Forwarded ports
+##################
+  config.vm.network "forwarded_port", guest: 8080, host: 8081, auto_correct: true
+
+
+# Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
+# such as FTP and Heroku are also available. See the documentation at
+# https://docs.vagrantup.com/v2/push/atlas.html for more information.
+# config.push.define "atlas" do |push|
+#   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
+# end
+
+# Enable provisioning with a shell script. Additional provisioners such as
+# Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+# documentation for more information about their specific syntax and use.
+# config.vm.provision "shell", inline: <<-SHELL
+#   sudo apt-get update
+#   sudo apt-get install -y apache2
+# SHELL
 
 end
-
-
-# # All Vagrant configuration is done below. The "2" in Vagrant.configure
-# # configures the configuration version (we support older styles for
-# # backwards compatibility). Please don't change it unless you know what
-# # you're doing.
-# Vagrant.configure(2) do |config|
-#   # The most common configuration options are documented and commented below.
-#   # For a complete reference, please see the online documentation at
-#   # https://docs.vagrantup.com.
-# 
-#   # Every Vagrant development environment requires a box. You can search for
-#   # boxes at https://atlas.hashicorp.com/search.
-#   config.vm.box = "aquametalabs/lagoon"
-# 
-#   # Disable automatic box update checking. If you disable this, then
-#   # boxes will only be checked for updates when the user runs
-#   # `vagrant box outdated`. This is not recommended.
-#   # config.vm.box_check_update = false
-# 
-#   # Create a forwarded port mapping which allows access to a specific port
-#   # within the machine from a port on the host machine. In the example below,
-#   # accessing "localhost:8080" will access port 80 on the guest machine.
-#   # config.vm.network "forwarded_port", guest: 80, host: 8080
-# 
-#   # Create a private network, which allows host-only access to the machine
-#   # using a specific IP.
-#   # config.vm.network "private_network", ip: "192.168.33.10"
-# 
-#   # Create a public network, which generally matched to bridged network.
-#   # Bridged networks make the machine appear as another physical device on
-#   # your network.
-#   # config.vm.network "public_network"
-# 
-#   # Share an additional folder to the guest VM. The first argument is
-#   # the path on the host to the actual folder. The second argument is
-#   # the path on the guest to mount the folder. And the optional third
-#   # argument is a set of non-required options.
-#   # config.vm.synced_folder "../data", "/vagrant_data"
-# 
-#   # Provider-specific configuration so you can fine-tune various
-#   # backing providers for Vagrant. These expose provider-specific options.
-#   # Example for VirtualBox:
-#   #
-#   # config.vm.provider "virtualbox" do |vb|
-#   #   # Display the VirtualBox GUI when booting the machine
-#   #   vb.gui = true
-#   #
-#   #   # Customize the amount of memory on the VM:
-#   #   vb.memory = "1024"
-#   # end
-#   #
-#   # View the documentation for the provider you are using for more
-#   # information on available options.
-# 
-#   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
-#   # such as FTP and Heroku are also available. See the documentation at
-#   # https://docs.vagrantup.com/v2/push/atlas.html for more information.
-#   # config.push.define "atlas" do |push|
-#   #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
-#   # end
-# 
-#   # Enable provisioning with a shell script. Additional provisioners such as
-#   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-#   # documentation for more information about their specific syntax and use.
-#   # config.vm.provision "shell", inline: <<-SHELL
-#   #   sudo apt-get update
-#   #   sudo apt-get install -y apache2
-#   # SHELL
-# end
