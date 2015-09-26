@@ -24,8 +24,8 @@ Vagrant.configure("2") do |config|
 ##################
   # What resources might we need to share?
   # Maybe filesystem for assets/pictures/videos
-  # Maybe backups/bundles
-  config.vm.synced_folder "~/bundles/", "/srv/aquameta/bundles", create: true
+  # Maybe backups/bundles here?
+  config.vm.synced_folder "~/lagoon/bundles/", "/srv/aquameta/bundles", create: true
 
   # If Aquameta install was shared - run Aquameta install everytime 'vagrant up'
   # config.vm.synced_folder "~/aquameta/", "/srv/aquameta"
@@ -36,7 +36,7 @@ Vagrant.configure("2") do |config|
 ##################
   # SSH
 ##################
-  config.ssh.username = 'aquameta'
+  config.ssh.username = "vagrant"
 
   # Maybe this should be false?
   config.ssh.forward_agent = true
@@ -48,6 +48,7 @@ Vagrant.configure("2") do |config|
   # Forwarded ports
 ##################
   config.vm.network "forwarded_port", guest: 8080, host: 8081, auto_correct: true
+  # By default 2222 is forwarded to 22 for SSH access
 
 
 # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
